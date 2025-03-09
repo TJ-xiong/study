@@ -15,6 +15,15 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/flipAnimation')">
         FLIP动画(元素结构发生变化的动画)
       </div>
+      <div class="item" @click="toPage('/throttle_debounce')">
+        节流throttle和防抖debounce
+      </div>
+      <div class="item" @click="toPage('/selector')">
+        特殊的选择器
+      </div>
+      <div class="item" @click="toPage('/musicScroll')">
+        歌词滚动
+      </div>
     </div>
   </main>
 </template>
