@@ -2,6 +2,7 @@
 import audioFile from '@/assets/music/gudao.mp3';
 import {musicEncData} from '@/assets/music/MusicEnc'
 import {onMounted, ref} from "vue";
+import AudioVisualization from "@/components/AudioVisualization.vue";
 
 interface MusicEnc {
   time: number,
@@ -87,7 +88,11 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <audio :ref="audioRef" :src="audioFile" controls></audio>
+    <div class="left">
+      <!--    音频可视化-->
+      <AudioVisualization :audio-ele="audioRef"/>
+      <audio :ref="audioRef" :src="audioFile" controls></audio>
+    </div>
 
     <div class="lyrics" :ref="lyricsContainer">
       <ul :ref="lyricsUlRef" class="lyrics_ul">
@@ -101,6 +106,13 @@ onMounted(() => {
   height: 100vh;
   background: #181818;
   text-align: center;
+  display: flex; /* 启用 Flexbox */
+  justify-content: space-between; /* 子元素之间平均分布 */
+}
+
+.left {
+  padding: 10px;
+  flex: 1; /* 让所有子元素平分父容器 */
 }
 
 audio {
@@ -109,13 +121,15 @@ audio {
 }
 
 .lyrics {
-  height: 80%;
+  flex: 1; /* 让所有子元素平分父容器 */
+  height: 100%;
   overflow: hidden;
 }
 
 .lyrics_ul {
   transition: 0.5s;
 }
+
 /**
 ❌ 如果 scoped 存在，那么 Vue 只会对 当前组件的静态元素 作用，动态创建的 li 不会被影响。
 ✅ 解决方案：去掉 scoped 或使用 deep 选择器：
