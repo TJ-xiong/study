@@ -55,5 +55,3 @@ function start() {
   color: white;
 }
 </style>
-<script setup lang="ts">
-</script>
