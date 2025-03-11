@@ -5,6 +5,7 @@ import FlipAnimation from "@/components/FlipAnimation.vue";
 import Throttle_debounce from "@/components/Throttle_debounce.vue";
 import Selector from "@/components/Selector.vue";
 import MusicScroll from "@/components/MusicScroll.vue";
+import FlexboxHeterogeneousLayout from "@/components/FlexboxHeterogeneousLayout.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
             path: '/musicScroll',
             name: 'MusicScroll',
             component: MusicScroll,
+        },
+        {
+            path: '/flexboxHeterogeneousLayout',
+            name: 'FlexboxHeterogeneousLayout',
+            component: FlexboxHeterogeneousLayout,
         },
     ],
 })

@@ -22,7 +22,10 @@ function toPage(url: string) {
         特殊的选择器
       </div>
       <div class="item" @click="toPage('/musicScroll')">
-        歌词滚动
+        歌词滚动+音频可视化
+      </div>
+      <div class="item" @click="toPage('/flexboxHeterogeneousLayout')">
+        弹性盒的异性布局
       </div>
     </div>
   </main>
