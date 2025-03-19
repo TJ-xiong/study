@@ -30,6 +30,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/echartsAutoY')">
         Echarts动态Y轴
       </div>
+      <div class="item" @click="toPage('/eChartsAdaptive')">
+        Echarts大小自适应
+      </div>
     </div>
   </main>
 </template>

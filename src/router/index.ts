@@ -7,6 +7,8 @@ import Selector from "@/components/Selector.vue";
 import MusicScroll from "@/components/MusicScroll.vue";
 import FlexboxHeterogeneousLayout from "@/components/FlexboxHeterogeneousLayout.vue";
 import EchartsAutoY from "@/components/EchartsAutoY.vue";
+import EChartsAdaptive from "@/components/EChartsAdaptive.vue";
+import HighlightCode from "@/components/HighlightCode.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +52,16 @@ const router = createRouter({
             path: '/echartsAutoY',
             name: 'EchartsAutoY',
             component: EchartsAutoY,
+        },
+        {
+            path: '/eChartsAdaptive',
+            name: 'EChartsAdaptive',
+            component: EChartsAdaptive,
+        },
+        {
+            path: '/highlightCode',
+            name: 'HighlightCode',
+            component: HighlightCode,
         },
     ],
 })
