@@ -9,6 +9,7 @@ import FlexboxHeterogeneousLayout from "@/components/FlexboxHeterogeneousLayout.
 import EchartsAutoY from "@/components/EchartsAutoY.vue";
 import EChartsAdaptive from "@/components/EChartsAdaptive.vue";
 import HighlightCode from "@/components/HighlightCode.vue";
+import EchartsSetThePositionOfAxisPointer from "@/components/EchartsSetThePositionOfAxisPointer.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +63,11 @@ const router = createRouter({
             path: '/highlightCode',
             name: 'HighlightCode',
             component: HighlightCode,
+        },
+        {
+            path: '/echartsSetThePositionOfAxisPointer',
+            name: 'EchartsSetThePositionOfAxisPointer',
+            component: EchartsSetThePositionOfAxisPointer,
         },
     ],
 })

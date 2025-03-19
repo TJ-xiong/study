@@ -33,6 +33,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/eChartsAdaptive')">
         Echarts大小自适应
       </div>
+      <div class="item" @click="toPage('/echartsSetThePositionOfAxisPointer')">
+        Echarts手动设置axisPointer的位置
+      </div>
     </div>
   </main>
 </template>
