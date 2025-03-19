@@ -27,6 +27,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/flexboxHeterogeneousLayout')">
         弹性盒的异性布局
       </div>
+      <div class="item" @click="toPage('/echartsAutoY')">
+        Echarts动态Y轴
+      </div>
     </div>
   </main>
 </template>
@@ -35,6 +38,7 @@ function toPage(url: string) {
 .container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: start;
   align-items: start;
 }

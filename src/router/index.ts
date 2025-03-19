@@ -6,6 +6,7 @@ import Throttle_debounce from "@/components/Throttle_debounce.vue";
 import Selector from "@/components/Selector.vue";
 import MusicScroll from "@/components/MusicScroll.vue";
 import FlexboxHeterogeneousLayout from "@/components/FlexboxHeterogeneousLayout.vue";
+import EchartsAutoY from "@/components/EchartsAutoY.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
             path: '/flexboxHeterogeneousLayout',
             name: 'FlexboxHeterogeneousLayout',
             component: FlexboxHeterogeneousLayout,
+        },
+        {
+            path: '/echartsAutoY',
+            name: 'EchartsAutoY',
+            component: EchartsAutoY,
         },
     ],
 })
