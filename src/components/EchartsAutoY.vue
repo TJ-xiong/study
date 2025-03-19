@@ -8,9 +8,6 @@
 import * as echarts from 'echarts';
 import { onMounted } from "vue";
 
-type EChartsOption = echarts.EChartsOption;
-let option: EChartsOption;
-
 let base = +new Date(1988, 9, 3);
 let oneDay = 24 * 3600 * 1000;
 
@@ -41,7 +38,7 @@ const calculateViewportRange = (startIndex: number, endIndex: number) => {
 // **初始化 Y 轴范围**
 let { minY, maxY, interval } = calculateViewportRange(0, 10);
 
-option = {
+const option = {
   title: {
     left: 'center',
     text: 'Large Area Chart'
