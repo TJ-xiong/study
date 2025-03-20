@@ -50,6 +50,7 @@ function toPage(url: string) {
 }
 
 .item {
+  cursor: pointer;
   background-color: aquamarine;
   height: 10vh;
   min-width: 10vw;

@@ -1,17 +1,19 @@
 <template>
   <div class="echarts">
     <div id="main" class="chart"></div>
+    <HighlightCode code-id="echartsSetThePositionOfAxisPointer"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
 import { onMounted } from 'vue';
+import HighlightCode from "@/components/HighlightCode.vue";
 
 let chartInstance: echarts.ECharts | null = null;
 
 const initChart = () => {
-  const chartDom = document.getElementById('main')!;
+  const chartDom = document.getElementById('main');
   chartInstance = echarts.init(chartDom);
 
   const option = {
@@ -41,9 +43,9 @@ const initChart = () => {
 
   chartInstance.setOption(option);
 
-  // 模拟在第 3 个数据点位置显示 axisPointer
+  // 模拟在随机数据点位置显示 axisPointer
   setInterval(() => {
-    setAxisPointer(new Date().getTime() % 7); // 设置在第3个点位置
+    setAxisPointer(new Date().getTime() % 7);
   }, 2000);
 };
 

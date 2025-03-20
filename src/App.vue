@@ -14,6 +14,7 @@ import router from "@/router";
 
 <style scoped>
 .back {
+  cursor: pointer;
   text-align: center;
   width: 50px;
   padding: 15px;

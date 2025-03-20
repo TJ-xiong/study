@@ -1,4 +1,3 @@
-<!--音频可视化-->
 <template>
   <div>
     <canvas id="canvas"></canvas>
