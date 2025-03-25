@@ -288,6 +288,54 @@ const Code = {
         "  margin: 0 5px;\n" +
         "}\n" +
         "</style>",
+    code_dialog: "<template>\n" +
+        "  <div>\n" +
+        "    <div class=\"btn\">\n" +
+        "      <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dialog\" target=\"_blank\">MDN文档</a>\n" +
+        "      <button onclick=\"dog.show()\">普通弹窗</button>\n" +
+        "      <button onclick=\"dog.showModal()\">模态弹窗</button>\n" +
+        "    </div>\n" +
+        "    <dialog id=\"dog\">\n" +
+        "      <div>\n" +
+        "        <p>弹窗</p>\n" +
+        "        <p>showModel弹窗才能设置蒙层效果和毛玻璃（backdrop）</p>\n" +
+        "        <p>\n" +
+        "          <input type=\"text\"/>\n" +
+        "        </p>\n" +
+        "        <p>\n" +
+        "          <input type=\"text\"/>\n" +
+        "        </p>\n" +
+        "        <button onclick=\"dog.close()\">关闭</button>\n" +
+        "      </div>\n" +
+        "    </dialog>\n" +
+        "  </div>\n" +
+        "</template>\n" +
+        "\n" +
+        "<script setup lang=\"ts\">\n" +
+        "\n" +
+        "</script>\n" +
+        "\n" +
+        "<style scoped>\n" +
+        "dialog {\n" +
+        "  border: 1px solid #ccc;\n" +
+        "  border-radius: 10px;\n" +
+        "  margin-top: 50px;\n" +
+        "}\n" +
+        "\n" +
+        "dialog::backdrop {\n" +
+        "  background: rgba(23, 234, 100, 0.5);\n" +
+        "  backdrop-filter: blur(5px);\n" +
+        "}\n" +
+        "\n" +
+        ".btn {\n" +
+        "  width: 100%;\n" +
+        "  height: 30px;\n" +
+        "  line-height: 30px;\n" +
+        "  display: flex;\n" +
+        "  justify-content: space-around;\n" +
+        "  align-items: center;\n" +
+        "}\n" +
+        "</style>",
 }
 
 export {

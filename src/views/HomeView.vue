@@ -39,6 +39,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/echartsSlideX')">
         Echarts可滑动X轴
       </div>
+      <div class="item" @click="toPage('/dialog')">
+        浏览器原生弹窗
+      </div>
     </div>
   </main>
 </template>

@@ -11,6 +11,7 @@ import EChartsAdaptive from "@/views/EChartsAdaptive.vue";
 import HighlightCode from "@/views/HighlightCode.vue";
 import EchartsSetThePositionOfAxisPointer from "@/views/EchartsSetThePositionOfAxisPointer.vue";
 import EchartsSlideX from "@/views/EchartsSlideX.vue";
+import Dialog from "@/views/Dialog.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,11 @@ const router = createRouter({
             path: '/echartsSlideX',
             name: 'EchartsSlideX',
             component: EchartsSlideX,
+        },
+        {
+            path: '/dialog',
+            name: 'Dialog',
+            component: Dialog,
         },
     ],
 })
