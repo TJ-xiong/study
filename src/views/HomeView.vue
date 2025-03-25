@@ -36,6 +36,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/echartsSetThePositionOfAxisPointer')">
         Echarts手动设置axisPointer的位置
       </div>
+      <div class="item" @click="toPage('/echartsSlideX')">
+        Echarts可滑动X轴
+      </div>
     </div>
   </main>
 </template>

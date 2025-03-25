@@ -77,6 +77,217 @@ const Code = {
         "  height: 30vh;\n" +
         "}\n" +
         "</style>",
+    code_sliderComponent: "<template>\n" +
+    "  <div class=\"container\" ref=\"containerRef\" :style=\"{ width: `${totalWidth}px` }\">\n" +
+    "    <div class=\"axis\">\n" +
+    "      <div\n" +
+    "        v-for=\"(value, index) in visibleValues\"\n" +
+    "        :key=\"value\"\n" +
+    "        class=\"tick-mark\"\n" +
+    "        :style=\"{ left: `${(index * gapSize)}px` }\"\n" +
+    "        @click=\"handleValueClick(value, startIndex + index)\"\n" +
+    "      >\n" +
+    "        <div \n" +
+    "          class=\"tick-value\"\n" +
+    "          :class=\"{ 'tick-value-active': isActiveValue(value) }\"\n" +
+    "        >\n" +
+    "          {{ value }}\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div\n" +
+    "      class=\"ball\"\n" +
+    "      :style=\"{ left: `${ballPosition}px` }\"\n" +
+    "    />\n" +
+    "  </div>\n" +
+    "</template>\n" +
+    "\n" +
+    "<script setup>\n" +
+    "import { ref, computed, onMounted } from 'vue'\n" +
+    "\n" +
+    "const props = defineProps({\n" +
+    "  values: {\n" +
+    "    type: Array,\n" +
+    "    required: true\n" +
+    "  },\n" +
+    "  totalWidth: {\n" +
+    "    type: Number,\n" +
+    "    required: true\n" +
+    "  },\n" +
+    "  gapSize: {\n" +
+    "    type: Number,\n" +
+    "    required: true\n" +
+    "  },\n" +
+    "  itemsPerPage: {\n" +
+    "    type: Number,\n" +
+    "    default: 7\n" +
+    "  }\n" +
+    "})\n" +
+    "\n" +
+    "const emits = defineEmits(['update:currentValue'])\n" +
+    "\n" +
+    "const currentValue = ref(props.values[0])\n" +
+    "const ballPosition = ref(0)\n" +
+    "const startIndex = ref(0)\n" +
+    "\n" +
+    "const endIndex = computed(() => startIndex.value + props.itemsPerPage)\n" +
+    "const visibleValues = computed(() => props.values.slice(startIndex.value, endIndex.value))\n" +
+    "\n" +
+    "const isActiveValue = (value) => Math.abs(currentValue.value - value) < 0.1\n" +
+    "\n" +
+    "const updateBallPosition = (moveToStart = true) => {\n" +
+    "  const relativeIndex = visibleValues.value.indexOf(currentValue.value)\n" +
+    "  if (relativeIndex !== -1) {\n" +
+    "    ballPosition.value = relativeIndex * props.gapSize\n" +
+    "  } else {\n" +
+    "    if (moveToStart) {\n" +
+    "      currentValue.value = visibleValues.value[0]\n" +
+    "      ballPosition.value = 0\n" +
+    "    } else {\n" +
+    "      currentValue.value = visibleValues.value[visibleValues.value.length - 1]\n" +
+    "      ballPosition.value = (visibleValues.value.length - 1) * props.gapSize\n" +
+    "    }\n" +
+    "  }\n" +
+    "  emits('update:currentValue', currentValue.value)\n" +
+    "}\n" +
+    "\n" +
+    "const handleValueClick = (value) => {\n" +
+    "  currentValue.value = value\n" +
+    "  updateBallPosition()\n" +
+    "}\n" +
+    "\n" +
+    "const prevPage = () => {\n" +
+    "  if (startIndex.value > 0) {\n" +
+    "    startIndex.value -= 1\n" +
+    "    updateBallPosition(false)\n" +
+    "  }\n" +
+    "}\n" +
+    "\n" +
+    "const nextPage = () => {\n" +
+    "  if (endIndex.value < props.values.length) {\n" +
+    "    startIndex.value += 1\n" +
+    "    updateBallPosition(true)\n" +
+    "  }\n" +
+    "}\n" +
+    "\n" +
+    "defineExpose({ prevPage, nextPage })\n" +
+    "\n" +
+    "// Ensure the ball position is correctly initialized on mount\n" +
+    "onMounted(() => {\n" +
+    "  updateBallPosition()\n" +
+    "})\n" +
+    "</script>\n" +
+    "\n" +
+    "<style scoped>\n" +
+    ".container {\n" +
+    "  position: relative;\n" +
+    "  height: 100px;\n" +
+    "  margin: 50px auto;\n" +
+    "  display: flex;\n" +
+    "  flex-direction: column;\n" +
+    "  align-items: center;\n" +
+    "}\n" +
+    "\n" +
+    ".axis {\n" +
+    "  position: relative;\n" +
+    "  width: 100%;\n" +
+    "  height: 60px;\n" +
+    "}\n" +
+    "\n" +
+    ".tick-mark {\n" +
+    "  position: absolute;\n" +
+    "  transform: translateX(-50%);\n" +
+    "}\n" +
+    "\n" +
+    ".tick-value {\n" +
+    "  font-size: 14px;\n" +
+    "  text-align: center;\n" +
+    "  color: #666;\n" +
+    "  transition: transform 0.3s ease;\n" +
+    "  position: relative;\n" +
+    "  z-index: 1;\n" +
+    "  line-height: 16px;\n" +
+    "  cursor: pointer;\n" +
+    "}\n" +
+    "\n" +
+    ".tick-value-active {\n" +
+    "  transform: translateY(-20px);\n" +
+    "  color: #000000;\n" +
+    "  font-weight: bold;\n" +
+    "}\n" +
+    "\n" +
+    ".ball {\n" +
+    "  position: absolute;\n" +
+    "  top: 4px;\n" +
+    "  width: 16px;\n" +
+    "  height: 16px;\n" +
+    "  background-color: red;\n" +
+    "  border-radius: 50%;\n" +
+    "  transform: translateX(-50%);\n" +
+    "  transition: left 0.2s ease;\n" +
+    "  pointer-events: none;\n" +
+    "}\n" +
+    "</style> ",
+    code_echartsSlideX: "<template>\n" +
+        "  <div>\n" +
+        "    <SliderComponent\n" +
+        "      ref=\"sliderRef\"\n" +
+        "      :values=\"myValues\"\n" +
+        "      :totalWidth=\"400\"\n" +
+        "      :gapSize=\"50\"\n" +
+        "      :itemsPerPage=\"7\"\n" +
+        "      @update:currentValue=\"handleCurrentValueUpdate\"\n" +
+        "    />\n" +
+        "    <div class=\"button-container\">\n" +
+        "      <button @click=\"prevPage\">前一页</button>\n" +
+        "      <button @click=\"nextPage\">后一页</button>\n" +
+        "    </div>\n" +
+        "  </div>\n" +
+        "</template>\n" +
+        "\n" +
+        "<script setup lang=\"ts\">\n" +
+        "import {type ComponentPublicInstance, ref} from 'vue';\n" +
+        "import SliderComponent from \"@/components/SliderComponent.vue\";\n" +
+        "\n" +
+        "const myValues = Array.from({ length: 30 }, (_, i) => i * 10)\n" +
+        "\n" +
+        "const handleCurrentValueUpdate = (newValue: any) => {\n" +
+        "  console.log('当前值:', newValue)\n" +
+        "}\n" +
+        "\n" +
+        "const sliderRef = ref<SliderInstance | null>(null)\n" +
+        "\n" +
+        "// 定义类型，假设 SliderComponent 有 prevPage 方法\n" +
+        "type SliderInstance = ComponentPublicInstance<{\n" +
+        "  prevPage: () => void;\n" +
+        "  nextPage: () => void;\n" +
+        "}>;\n" +
+        "\n" +
+        "const prevPage = (): void => {\n" +
+        "  if (sliderRef.value) {\n" +
+        "    sliderRef.value.prevPage()\n" +
+        "  }\n" +
+        "}\n" +
+        "\n" +
+        "const nextPage = (): void => {\n" +
+        "  if (sliderRef.value) {\n" +
+        "    sliderRef.value.nextPage()\n" +
+        "  }\n" +
+        "}\n" +
+        "</script>\n" +
+        "\n" +
+        "<style scoped>\n" +
+        ".button-container {\n" +
+        "  margin-top: 10px;\n" +
+        "  display: flex;\n" +
+        "  justify-content: center;\n" +
+        "}\n" +
+        "\n" +
+        "button {\n" +
+        "  margin: 0 5px;\n" +
+        "}\n" +
+        "</style>",
 }
 
 export {

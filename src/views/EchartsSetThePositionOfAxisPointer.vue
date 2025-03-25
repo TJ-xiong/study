@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
 import { onMounted } from 'vue';
-import HighlightCode from "@/components/HighlightCode.vue";
+import HighlightCode from "@/views/HighlightCode.vue";
 
 let chartInstance: echarts.ECharts | null = null;
 

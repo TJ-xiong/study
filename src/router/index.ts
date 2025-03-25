@@ -1,15 +1,16 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import DraggableSort from '@/components/DraggableSort.vue'
-import FlipAnimation from "@/components/FlipAnimation.vue";
-import Throttle_debounce from "@/components/Throttle_debounce.vue";
-import Selector from "@/components/Selector.vue";
-import MusicScroll from "@/components/MusicScroll.vue";
-import FlexboxHeterogeneousLayout from "@/components/FlexboxHeterogeneousLayout.vue";
-import EchartsAutoY from "@/components/EchartsAutoY.vue";
-import EChartsAdaptive from "@/components/EChartsAdaptive.vue";
-import HighlightCode from "@/components/HighlightCode.vue";
-import EchartsSetThePositionOfAxisPointer from "@/components/EchartsSetThePositionOfAxisPointer.vue";
+import DraggableSort from '@/views/DraggableSort.vue'
+import FlipAnimation from "@/views/FlipAnimation.vue";
+import Throttle_debounce from "@/views/Throttle_debounce.vue";
+import Selector from "@/views/Selector.vue";
+import MusicScroll from "@/views/MusicScroll.vue";
+import FlexboxHeterogeneousLayout from "@/views/FlexboxHeterogeneousLayout.vue";
+import EchartsAutoY from "@/views/EchartsAutoY.vue";
+import EChartsAdaptive from "@/views/EChartsAdaptive.vue";
+import HighlightCode from "@/views/HighlightCode.vue";
+import EchartsSetThePositionOfAxisPointer from "@/views/EchartsSetThePositionOfAxisPointer.vue";
+import EchartsSlideX from "@/views/EchartsSlideX.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +69,11 @@ const router = createRouter({
             path: '/echartsSetThePositionOfAxisPointer',
             name: 'EchartsSetThePositionOfAxisPointer',
             component: EchartsSetThePositionOfAxisPointer,
+        },
+        {
+            path: '/echartsSlideX',
+            name: 'EchartsSlideX',
+            component: EchartsSlideX,
         },
     ],
 })

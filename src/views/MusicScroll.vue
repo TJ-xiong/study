@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import audioFile from '@/assets/music/gudao.mp3';
-import {musicEncData} from '@/assets/music/MusicEnc'
+import {musicEncData} from '@/assets/music/MusicEnc.ts'
 import {onMounted, ref} from "vue";
-import AudioVisualization from "@/components/AudioVisualization.vue";
+import AudioVisualization from "@/views/AudioVisualization.vue";
 
 interface MusicEnc {
   time: number,
