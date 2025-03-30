@@ -336,6 +336,26 @@ const Code = {
         "  align-items: center;\n" +
         "}\n" +
         "</style>",
+    code_customRefDebounce: 'import {customRef} from "vue";\n' +
+        '\n' +
+        'export function debounceRef(value: any, delay = 1000) {\n' +
+        '    let timeout = delay;\n' +
+        '    return customRef((track, trigger) => {\n' +
+        '        return {\n' +
+        '            get() {\n' +
+        '                track();\n' +
+        '                return value;\n' +
+        '            },\n' +
+        '            set(newValue) {\n' +
+        '                clearTimeout(timeout);\n' +
+        '                timeout = setTimeout(() => {\n' +
+        '                    value = newValue;\n' +
+        '                    trigger();\n' +
+        '                }, delay);\n' +
+        '            }\n' +
+        '        }\n' +
+        '    })\n' +
+        '}',
 }
 
 export {

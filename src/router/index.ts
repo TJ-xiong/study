@@ -12,6 +12,7 @@ import HighlightCode from "@/views/HighlightCode.vue";
 import EchartsSetThePositionOfAxisPointer from "@/views/EchartsSetThePositionOfAxisPointer.vue";
 import EchartsSlideX from "@/views/EchartsSlideX.vue";
 import Dialog from "@/views/Dialog.vue";
+import CustomRefDebounce from "@/views/CustomRefDebounce.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,11 @@ const router = createRouter({
             path: '/dialog',
             name: 'Dialog',
             component: Dialog,
+        },
+        {
+            path: '/customRefDebounce',
+            name: 'CustomRefDebounce',
+            component: CustomRefDebounce,
         },
     ],
 })

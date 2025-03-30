@@ -42,6 +42,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/dialog')">
         浏览器原生弹窗
       </div>
+      <div class="item" @click="toPage('/customRefDebounce')">
+        customRef实现防抖
+      </div>
     </div>
   </main>
 </template>
