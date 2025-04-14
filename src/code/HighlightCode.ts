@@ -356,6 +356,49 @@ const Code = {
         '        }\n' +
         '    })\n' +
         '}',
+    code_wrapListener: '<template>\n' +
+        '  <div>\n' +
+        '    <div ref="contentRef">First：元素参与 transtion 的初始状态。Last：元素的最终状态。Invert：这让元素看起来仍然在初始的位置，所以元素并没有达到最终的位置。</div>\n' +
+        '    <div>{{ isWrap ? \'换行了\' : \'不换行\' }}</div>\n' +
+        '  </div>\n' +
+        '</template>\n' +
+        '\n' +
+        '<script lang="ts" setup>\n' +
+        'import {onMounted, onUnmounted, ref} from "vue";\n' +
+        '\n' +
+        'const isWrap = ref<boolean>(false);\n' +
+        'const contentRef = ref();\n' +
+        '\n' +
+        'const resizeHandler = () => {\n' +
+        '  if (contentRef.value) {\n' +
+        '    const el = contentRef.value;\n' +
+        '    let lineHeight = parseFloat(getComputedStyle(el).lineHeight);\n' +
+        '    // 如果拿不到行高（是 normal），用 fontSize 的 1.2 倍来估算\n' +
+        '    if (isNaN(lineHeight)) {\n' +
+        '      const fontSize = parseFloat(getComputedStyle(el).fontSize);\n' +
+        '      lineHeight = fontSize * 1.2 // 根据经验，一般 normal 大约是 1.2~1.4 倍字体\n' +
+        '    }\n' +
+        '    const lines = Math.round(el.clientHeight / lineHeight);\n' +
+        '\n' +
+        '    console.log(\'行数为：\', lines);\n' +
+        '    isWrap.value = lines > 1;\n' +
+        '    if (isWrap.value) {\n' +
+        '      console.log(\'文字换行了\');\n' +
+        '    } else {\n' +
+        '      console.log(\'没有换行\');\n' +
+        '    }\n' +
+        '  }\n' +
+        '}\n' +
+        '\n' +
+        'onMounted(() => {\n' +
+        '  resizeHandler();\n' +
+        '  window.addEventListener(\'resize\', resizeHandler);\n' +
+        '})\n' +
+        '\n' +
+        'onUnmounted(() => {\n' +
+        '  window.removeEventListener(\'resize\', resizeHandler);\n' +
+        '})\n' +
+        '</script>',
 }
 
 export {

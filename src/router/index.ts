@@ -13,6 +13,7 @@ import EchartsSetThePositionOfAxisPointer from "@/views/EchartsSetThePositionOfA
 import EchartsSlideX from "@/views/EchartsSlideX.vue";
 import Dialog from "@/views/Dialog.vue";
 import CustomRefDebounce from "@/views/CustomRefDebounce.vue";
+import WrapListener from "@/views/WrapListener.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +87,11 @@ const router = createRouter({
             path: '/customRefDebounce',
             name: 'CustomRefDebounce',
             component: CustomRefDebounce,
+        },
+        {
+            path: '/wrapListener',
+            name: 'WrapListener',
+            component: WrapListener,
         },
     ],
 })
