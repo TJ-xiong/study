@@ -399,6 +399,362 @@ const Code = {
         '  window.removeEventListener(\'resize\', resizeHandler);\n' +
         '})\n' +
         '</script>',
+    code_fontSizeAuto: '<template>\n' +
+        '  <div class="container">\n' +
+        '    <div class="text-box">\n' +
+        '      这是一段可以根据屏幕宽度自动调整字体大小的文字，最多显示两行，超出部分自动显示省略号。\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '</template>\n' +
+        '\n' +
+        '<script setup lang="ts">\n' +
+        '\n' +
+        '</script>\n' +
+        '\n' +
+        '<style scoped>\n' +
+        '.container {\n' +
+        '  width: 100%;\n' +
+        '}\n' +
+        '\n' +
+        '.text-box {\n' +
+        '  width: 80%;\n' +
+        '  background: darkkhaki;\n' +
+        '  font-size: clamp(14px, 2vw, 20px); /* 随屏幕大小自适应 */\n' +
+        '  line-height: 1.4;\n' +
+        '  max-height: calc(1.4em * 2); /* 1.4 行高 × 2 行 */\n' +
+        '  overflow: hidden;\n' +
+        '  display: -webkit-box;\n' +
+        '  -webkit-line-clamp: 2; /* 限制 2 行 */\n' +
+        '  -webkit-box-orient: vertical;\n' +
+        '  text-overflow: ellipsis;\n' +
+        '}\n' +
+        '</style>',
+    code_adaptiveText: '<template>\n' +
+        '  <div\n' +
+        '      ref="textRef"\n' +
+        '      class="adaptive-text"\n' +
+        '      :style="computedStyle"\n' +
+        '  >\n' +
+        '    <slot />\n' +
+        '  </div>\n' +
+        '</template>\n' +
+        '\n' +
+        '<script setup lang="ts">\n' +
+        'import { ref, computed, onMounted, nextTick } from \'vue\'\n' +
+        '\n' +
+        'const props = defineProps({\n' +
+        '  minFontSize: {\n' +
+        '    type: Number,\n' +
+        '    default: 14,\n' +
+        '  },\n' +
+        '  maxFontSize: {\n' +
+        '    type: Number,\n' +
+        '    default: 20,\n' +
+        '  },\n' +
+        '  lineHeight: {\n' +
+        '    type: [Number, String],\n' +
+        '    default: undefined, // <== 如果没传，我们自动推算\n' +
+        '  },\n' +
+        '  lines: {\n' +
+        '    type: Number,\n' +
+        '    default: 2,\n' +
+        '  },\n' +
+        '})\n' +
+        '\n' +
+        'const textRef = ref(null)\n' +
+        'const estimatedLineHeight = ref(1.4) // 默认值\n' +
+        '\n' +
+        'const computedStyle = computed(() => {\n' +
+        '  return {\n' +
+        '    fontSize: `clamp(${props.minFontSize}px, 2vw, ${props.maxFontSize}px)`,\n' +
+        '    lineHeight: props.lineHeight ?? estimatedLineHeight.value,\n' +
+        '    maxHeight: `${(Number(props.lineHeight) ?? estimatedLineHeight.value) * props.lines}em`,\n' +
+        '  }\n' +
+        '})\n' +
+        '\n' +
+        'function estimateLineHeight() {\n' +
+        '  if (!textRef.value) return\n' +
+        '\n' +
+        '  const el = textRef.value\n' +
+        '  const computed = window.getComputedStyle(el)\n' +
+        '  const fontSize = parseFloat(computed.fontSize)\n' +
+        '\n' +
+        '  // 获取 lineHeight，处理 normal 的情况\n' +
+        '  let rawLineHeight = computed.lineHeight\n' +
+        '  let lineHeightPx = 0\n' +
+        '\n' +
+        '  if (rawLineHeight === \'normal\') {\n' +
+        '    lineHeightPx = fontSize * 1.2 // 估算\n' +
+        '  } else {\n' +
+        '    lineHeightPx = parseFloat(rawLineHeight)\n' +
+        '  }\n' +
+        '\n' +
+        '  // 更新 em 值（即 lineHeight）\n' +
+        '  estimatedLineHeight.value = parseFloat((lineHeightPx / fontSize).toFixed(2))\n' +
+        '}\n' +
+        '\n' +
+        'onMounted(() => {\n' +
+        '  nextTick(estimateLineHeight)\n' +
+        '})\n' +
+        '</script>\n' +
+        '\n' +
+        '<style scoped>\n' +
+        '.adaptive-text {\n' +
+        '  overflow: hidden;\n' +
+        '  display: -webkit-box;\n' +
+        '  -webkit-line-clamp: 2;\n' +
+        '  -webkit-box-orient: vertical;\n' +
+        '  text-overflow: ellipsis;\n' +
+        '}\n' +
+        '</style>\n',
+    code_clamp:
+        '```css\n' +
+        'font-size: clamp(14px, 2vw, 20px);\n' +
+        '```\n' +
+        '\n' +
+        '看起来简单，实际上背后藏着精妙的响应式逻辑。我们来**逐步拆解理解**：\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 🎯 clamp() 是什么？\n' +
+        '\n' +
+        '`clamp(min, preferred, max)` 是一个 CSS 函数，用来定义一个值在一个**范围区间内响应变化**，它会：\n' +
+        '\n' +
+        '- **最小值 (`min`)：永远不会小于它**\n' +
+        '- **最大值 (`max`)：永远不会大于它**\n' +
+        '- **首选值 (`preferred`)：在 min 和 max 范围之间按需伸缩**\n' +
+        '\n' +
+        '### 🧠 它会自动选择一个值：\n' +
+        '```text\n' +
+        '最终值 = 在 min 和 max 之间，最接近 preferred 的那个值\n' +
+        '```\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 👇 拆解这句：\n' +
+        '\n' +
+        '```css\n' +
+        'font-size: clamp(14px, 2vw, 20px);\n' +
+        '```\n' +
+        '\n' +
+        '| 参数 | 含义 |\n' +
+        '|------|------|\n' +
+        '| `14px` | 最小字体：不小于 14px，无论屏幕多窄 |\n' +
+        '| `2vw` | 首选字体：根据视口宽度的 2% 进行缩放 |\n' +
+        '| `20px` | 最大字体：不大于 20px，无论屏幕多宽 |\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 📱 示例分析（假设不同屏幕宽度）：\n' +
+        '\n' +
+        '| 视口宽度 | 计算出的 `2vw` | 最终字体大小 |\n' +
+        '|----------|----------------|----------------|\n' +
+        '| 300px    | 6px            | `14px`（因为太小，小于最小值） |\n' +
+        '| 600px    | 12px           | `14px`（仍然小） |\n' +
+        '| 800px    | 16px           | `16px`（在范围内）✅ |\n' +
+        '| 1000px   | 20px           | `20px` ✅ |\n' +
+        '| 1200px   | 24px           | `20px`（太大，限制为最大值） |\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## ✅ 总结：为什么这么写很香？\n' +
+        '\n' +
+        '1. **字体响应式变化：** 在小屏设备（手机）上字体自动变小，在大屏（PC）上字体自动变大。\n' +
+        '2. **保底+封顶保护：** 保证不会太小看不清，也不会太大挤爆布局。\n' +
+        '3. **简洁优雅替代媒体查询：** 无需写 `@media`，一行搞定自适应。\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 🧪 Tips：clamp 还能干什么？\n' +
+        '\n' +
+        '除了 `font-size`，它还可以用于：\n' +
+        '\n' +
+        '- `padding: clamp(10px, 2vw, 40px)`\n' +
+        '- `gap: clamp(8px, 1.5vw, 32px)`\n' +
+        '- `margin`, `width`, `height`, `border-radius`……\n' +
+        '\n' +
+        '**一切长度单位都能用 `clamp()`！**\n' +
+        '\n' +
+        '---\n',
+    code_em: '`em` 是一种相对单位，用于表示长度（比如字体大小、间距、宽高等）。它非常重要且常用于响应式设计，尤其在控制文字布局时非常灵活。\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 📐 `em` 是什么？\n' +
+        '\n' +
+        '> `1em = 当前元素的字体大小`\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 🧠 举个例子：\n' +
+        '\n' +
+        '```css\n' +
+        '.parent {\n' +
+        '  font-size: 16px;\n' +
+        '}\n' +
+        '\n' +
+        '.child {\n' +
+        '  font-size: 2em; /* = 2 * 16px = 32px */\n' +
+        '}\n' +
+        '```\n' +
+        '\n' +
+        '所以：\n' +
+        '\n' +
+        '- `em` 是 **相对于当前元素的字体大小**\n' +
+        '- 如果你设置了 `font-size: 2em`，那就是 “两倍字体大小”\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '### 🔁 它是递归的（继承链生效）\n' +
+        '\n' +
+        '如果你嵌套了多个元素，而子元素的 `em` 会相对于它**父级元素**的字体大小：\n' +
+        '\n' +
+        '```css\n' +
+        '.outer {\n' +
+        '  font-size: 20px;\n' +
+        '}\n' +
+        '.inner {\n' +
+        '  font-size: 0.5em; /* = 10px */\n' +
+        '}\n' +
+        '```\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## ✅ 常见用途：\n' +
+        '\n' +
+        '| 属性 | 用法 |\n' +
+        '|------|------|\n' +
+        '| `font-size` | 相对于父元素字体大小进行缩放 |\n' +
+        '| `padding / margin` | 随着文字一起变大或变小 |\n' +
+        '| `line-height` | 设置文字之间的行距（比如 `1.4em`）|\n' +
+        '| `max-height` | 限制显示几行文本（配合 `line-height`）|\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## ✅ 和其他单位对比：\n' +
+        '\n' +
+        '| 单位 | 含义 | 适用场景 |\n' +
+        '|------|------|----------|\n' +
+        '| `px` | 绝对单位，像素 | 精准布局，不随屏幕缩放 |\n' +
+        '| `em` | 相对当前字体大小 | 随字体缩放，用于文字、间距等 |\n' +
+        '| `rem` | 相对于 root (`html`) 字体大小 | 更一致、适合全局响应式布局 |\n' +
+        '| `%` | 相对父元素尺寸 | 用于宽高等 |\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 🚀 Bonus：em 和多行截断结合示例\n' +
+        '\n' +
+        '```css\n' +
+        '.line-clamp-2 {\n' +
+        '  line-height: 1.4;\n' +
+        '  max-height: 2.8em; /* 1.4em × 2 行 */\n' +
+        '}\n' +
+        '```\n' +
+        '\n' +
+        '这里使用 `em` 非常自然，因为它随字体大小变化，确保了“显示 2 行”这个目标不被破坏。\n' +
+        '\n' +
+        '---\n' +
+        '\n',
+    code_emDemo: '太棒啦😄！这就给你做一个 **小演示 demo**，帮助你直观理解 `em` 和它在**多行截断中的妙用**。\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 🎬 演示效果说明：\n' +
+        '\n' +
+        '我们将对比两种布局：\n' +
+        '\n' +
+        '1. **使用 `px` 限制高度**：一旦字体大小变了，就不准了 ❌  \n' +
+        '2. **使用 `em` 限制高度**：随着字体大小自动适配 ✅\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## ✅ Vue 示例：`EmLineClampDemo.vue`\n' +
+        '\n' +
+        '```vue\n' +
+        '<template>\n' +
+        '  <div class="demo">\n' +
+        '    <h2>字体大小调整</h2>\n' +
+        '    <input\n' +
+        '      type="range"\n' +
+        '      min="12"\n' +
+        '      max="28"\n' +
+        '      v-model="fontSize"\n' +
+        '    />\n' +
+        '    <span class="font-label">{{ fontSize }}px</span>\n' +
+        '\n' +
+        '    <h3>❌ 使用 px 限制 max-height（固定高度）</h3>\n' +
+        '    <div class="text-box text-px" :style="pxStyle">\n' +
+        '      {{ longText }}\n' +
+        '    </div>\n' +
+        '\n' +
+        '    <h3>✅ 使用 em 限制 max-height（随字体变化）</h3>\n' +
+        '    <div class="text-box text-em" :style="emStyle">\n' +
+        '      {{ longText }}\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '</template>\n' +
+        '\n' +
+        '<script setup>\n' +
+        'import { ref, computed } from \'vue\'\n' +
+        '\n' +
+        'const fontSize = ref(16)\n' +
+        '\n' +
+        'const longText = `\n' +
+        '  这是一段比较长的中文文本，用于展示多行文字的截断效果。\n' +
+        '  随着你拖动滑块改变字体大小，你可以观察到使用 em 的方式可以更加自适应和准确地控制最多显示两行。\n' +
+        '  而使用 px 的方式在字体变大时就会出现被截断不准的问题。\n' +
+        '`\n' +
+        '\n' +
+        'const pxStyle = computed(() => ({\n' +
+        '  fontSize: `${fontSize.value}px`,\n' +
+        '  maxHeight: \'40px\', // 固定高度：约 2 行 @ 20px 字号\n' +
+        '  lineHeight: \'1.4\',\n' +
+        '}))\n' +
+        '\n' +
+        'const emStyle = computed(() => ({\n' +
+        '  fontSize: `${fontSize.value}px`,\n' +
+        '  lineHeight: \'1.4\',\n' +
+        '  maxHeight: `${1.4 * 2}em`, // 自适应 2 行\n' +
+        '}))\n' +
+        '</script>\n' +
+        '\n' +
+        '<style scoped>\n' +
+        '.demo {\n' +
+        '  max-width: 600px;\n' +
+        '  margin: auto;\n' +
+        '  font-family: sans-serif;\n' +
+        '}\n' +
+        'input {\n' +
+        '  width: 100%;\n' +
+        '  margin-bottom: 10px;\n' +
+        '}\n' +
+        '.font-label {\n' +
+        '  display: inline-block;\n' +
+        '  margin-left: 8px;\n' +
+        '}\n' +
+        '.text-box {\n' +
+        '  overflow: hidden;\n' +
+        '  text-overflow: ellipsis;\n' +
+        '  display: -webkit-box;\n' +
+        '  -webkit-box-orient: vertical;\n' +
+        '  -webkit-line-clamp: 2;\n' +
+        '  margin: 10px 0;\n' +
+        '  padding: 8px;\n' +
+        '  background: #f5f5f5;\n' +
+        '  border-radius: 8px;\n' +
+        '}\n' +
+        '</style>\n' +
+        '```\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '## 📸 演示重点：\n' +
+        '\n' +
+        '- 拖动滑块，增大字体；\n' +
+        '- 看 “使用 px 限制高度” 的盒子溢出了，省略号错乱；\n' +
+        '- 而 “使用 em 限制高度” 的盒子，始终恰好两行！\n' +
+        '\n' +
+        '---\n',
 }
 
 export {

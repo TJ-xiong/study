@@ -48,6 +48,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/wrapListener')">
         监听显示内容是否换行了
       </div>
+      <div class="item" @click="toPage('/fontSizeAuto')">
+        文字大小自适应
+      </div>
     </div>
   </main>
 </template>
