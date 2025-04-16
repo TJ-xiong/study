@@ -11,6 +11,12 @@
     <code>组件化：</code>
     <highlight-code code-id="adaptiveText"/>
 
+    <code>指令化：</code>
+    <div class="text-box" v-adaptive-text="{ min: 16, max: 24, lines: 2, lineHeight: 1.5 }">
+      这是一段可以根据屏幕宽度自动调整字体大小的文字，最多显示两行，超出部分自动显示省略号。
+    </div>
+    <highlight-code code-id="fontSizeAutoDirective"/>
+
     <code>详细解释font-size: clamp(14px, 2vw, 20px);</code>
     <highlight-code code-id="clamp"/>
 
@@ -24,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-
 import AdaptiveText from "@/components/AdaptiveText.vue";
 import HighlightCode from "@/views/HighlightCode.vue";
 import EmLineClampDemo from "@/components/EmLineClampDemo.vue";

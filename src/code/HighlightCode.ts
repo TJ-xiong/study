@@ -755,6 +755,79 @@ const Code = {
         '- 而 “使用 em 限制高度” 的盒子，始终恰好两行！\n' +
         '\n' +
         '---\n',
+    code_fontSizeAutoDirective: 'import type { DirectiveBinding, ObjectDirective } from \'vue\'\n' +
+        '\n' +
+        'interface AdaptiveTextOptions {\n' +
+        '    min?: number     // 最小字体\n' +
+        '    max?: number     // 最大字体\n' +
+        '    lines?: number   // 最多行数\n' +
+        '    lineHeight?: number // 可选：自定义行高\n' +
+        '}\n' +
+        '\n' +
+        'const adaptiveText: ObjectDirective = {\n' +
+        '    mounted(el: HTMLElement, binding: DirectiveBinding<AdaptiveTextOptions>) {\n' +
+        '        const options = binding.value || {}\n' +
+        '\n' +
+        '        const minFont = options.min ?? 14\n' +
+        '        const maxFont = options.max ?? 20\n' +
+        '        const lines = options.lines ?? 2\n' +
+        '        const providedLineHeight = options.lineHeight\n' +
+        '\n' +
+        '        // 设置自适应字体大小\n' +
+        '        el.style.fontSize = `clamp(${minFont}px, 2vw, ${maxFont}px)`\n' +
+        '\n' +
+        '        // 设置基础样式\n' +
+        '        Object.assign(el.style, {\n' +
+        '            display: \'-webkit-box\',\n' +
+        '            WebkitBoxOrient: \'vertical\',\n' +
+        '            WebkitLineClamp: lines.toString(),\n' +
+        '            overflow: \'hidden\',\n' +
+        '            textOverflow: \'ellipsis\',\n' +
+        '        })\n' +
+        '\n' +
+        '        if (providedLineHeight) {\n' +
+        '            // 用户提供了行高，直接使用\n' +
+        '            el.style.lineHeight = String(providedLineHeight)\n' +
+        '            el.style.maxHeight = `${providedLineHeight * lines}em`\n' +
+        '        } else {\n' +
+        '            // 没提供：动态获取行高\n' +
+        '            requestAnimationFrame(() => {\n' +
+        '                const computed = window.getComputedStyle(el)\n' +
+        '                const fontSize = parseFloat(computed.fontSize)\n' +
+        '                let lineHeightPx: number\n' +
+        '\n' +
+        '                if (computed.lineHeight === \'normal\') {\n' +
+        '                    lineHeightPx = fontSize * 1.4 // 默认估算\n' +
+        '                } else {\n' +
+        '                    lineHeightPx = parseFloat(computed.lineHeight)\n' +
+        '                }\n' +
+        '\n' +
+        '                const ratio = lineHeightPx / fontSize\n' +
+        '                el.style.lineHeight = ratio.toFixed(2)\n' +
+        '                el.style.maxHeight = `${ratio * lines}em`\n' +
+        '            })\n' +
+        '        }\n' +
+        '    }\n' +
+        '}\n' +
+        '\n' +
+        'export default adaptiveText\n' +
+        '\n' +
+        '// main.ts\n' +
+        'import { createApp } from \'vue\'\n' +
+        'import App from \'./App.vue\'\n' +
+        'import adaptiveText from \'@/directives/AdaptiveText.ts\' // 导入指令\n' +
+        '\n' +
+        'const app = createApp(App)\n' +
+        '\n' +
+        '// 全局注册指令\n' +
+        'app.directive(\'adaptive-text\', adaptiveText)\n' +
+        '\n' +
+        'app.mount(\'#app\')' +
+        '\n' +
+        '// 使用\n' +
+        '<div class="text-box" v-adaptive-text="{ min: 16, max: 24, lines: 2, lineHeight: 1.5 }">\n' +
+        '  这是一段可以根据屏幕宽度自动调整字体大小的文字，最多显示两行，超出部分自动显示省略号。\n' +
+        '</div>',
 }
 
 export {
