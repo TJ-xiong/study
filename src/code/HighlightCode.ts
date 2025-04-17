@@ -828,6 +828,80 @@ const Code = {
         '<div class="text-box" v-adaptive-text="{ min: 16, max: 24, lines: 2, lineHeight: 1.5 }">\n' +
         '  这是一段可以根据屏幕宽度自动调整字体大小的文字，最多显示两行，超出部分自动显示省略号。\n' +
         '</div>',
+    code_resizeAdaptiveText: 'import type { ObjectDirective } from \'vue\'\n' +
+        '\n' +
+        'interface ResizeAdaptiveOptions {\n' +
+        '    min?: number;\n' +
+        '    max?: number;\n' +
+        '    lines?: number;\n' +
+        '    lineHeight?: number;\n' +
+        '}\n' +
+        '\n' +
+        'const resizeAdaptiveText: ObjectDirective<HTMLElement, ResizeAdaptiveOptions> = {\n' +
+        '    mounted(el, binding) {\n' +
+        '        const options = binding.value || {};\n' +
+        '        const min = options.min ?? 14;\n' +
+        '        const max = options.max ?? 20;\n' +
+        '        const lines = options.lines ?? 2;\n' +
+        '        const lineHeight = options.lineHeight ?? 1.4;\n' +
+        '\n' +
+        '        const applyFontSize = () => {\n' +
+        '            const containerWidth = el.clientWidth;\n' +
+        '            if (containerWidth === 0) return;\n' +
+        '\n' +
+        '            // 先设置为单行\n' +
+        '            el.style.whiteSpace = \'nowrap\';\n' +
+        '            el.style.overflow = \'hidden\';\n' +
+        '            el.style.display = \'block\';\n' +
+        '\n' +
+        '            // 初始化字体\n' +
+        '            let fontSize = max;\n' +
+        '            el.style.fontSize = `${fontSize}px`;\n' +
+        '\n' +
+        '            // 尝试缩小字体直到 fits\n' +
+        '            const precision = 0.1;\n' +
+        '            while (el.scrollWidth > containerWidth && fontSize > min) {\n' +
+        '                fontSize -= precision;\n' +
+        '                el.style.fontSize = `${fontSize}px`;\n' +
+        '            }\n' +
+        '\n' +
+        '            // 判断最终是否仍然溢出\n' +
+        '            if (el.scrollWidth > containerWidth) {\n' +
+        '                // 换行展示，但保持 fontSize 不变\n' +
+        '                el.style.whiteSpace = \'normal\';\n' +
+        '                el.style.display = \'-webkit-box\';\n' +
+        '                el.style.lineHeight = `${lineHeight}`;\n' +
+        '                el.style.maxHeight = `${fontSize * lineHeight * lines}px`;\n' +
+        '                el.style.overflow = \'hidden\';\n' +
+        '                el.style.textOverflow = \'ellipsis\';\n' +
+        '                (el.style as any).webkitLineClamp = String(lines);\n' +
+        '                (el.style as any).webkitBoxOrient = \'vertical\';\n' +
+        '                // ❗️关键：字体保持不动\n' +
+        '                el.style.fontSize = `${fontSize}px`;\n' +
+        '            }\n' +
+        '        }\n' +
+        '\n' +
+        '        const resizeObserver = new ResizeObserver(() => {\n' +
+        '            requestAnimationFrame(applyFontSize);\n' +
+        '        })\n' +
+        '\n' +
+        '        resizeObserver.observe(el);\n' +
+        '        requestAnimationFrame(applyFontSize);\n' +
+        '\n' +
+        '        (el as any).__resizeObserver__ = resizeObserver;\n' +
+        '    },\n' +
+        '\n' +
+        '    unmounted(el) {\n' +
+        '        const observer = (el as any).__resizeObserver__ as ResizeObserver | undefined;\n' +
+        '        if (observer) observer.disconnect();\n' +
+        '    }\n' +
+        '}\n' +
+        '\n' +
+        'export default resizeAdaptiveText\n' +
+        '\n' +
+        '<div class="text-box" v-resize-adaptive-text="{ min: 14, max: 20, lines: 2 }">\n' +
+        '  这是一段可以根据屏幕宽度自动调整字体大小的文字，最多显示两行，超出部分自动显示省略号。\n' +
+        '</div>',
 }
 
 export {

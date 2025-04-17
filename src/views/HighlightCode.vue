@@ -2,6 +2,9 @@
   <div class="container">
     <div class="toolbar">
       <div class="handle-btn" @click="showCode = !showCode">{{handleBtnCtn}}</div>
+      <div v-if="slots.default" class="title">
+        <slot></slot>
+      </div>
     </div>
     <highlightjs v-show="showCode" class="code" autodetect :code="code"/>
   </div>
@@ -10,6 +13,9 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, type Ref, watch} from "vue";
 import {Code} from "@/code/HighlightCode.ts";
+import { useSlots } from 'vue'
+
+const slots = useSlots()
 
 const code: Ref<string> = ref('');
 const props = withDefaults(defineProps<{ codeId: string }>(), { codeId: '1' });
@@ -63,8 +69,11 @@ onMounted(() => {
   .toolbar {
     width: 92%;
     height: 60px;
+    display: flex;
+    justify-content: space-between;
 
     .handle-btn {
+      height: fit-content;
       background-color: #2c3e50;
       color: white;
       padding: 10px 20px;
@@ -72,6 +81,15 @@ onMounted(() => {
       border-radius: 8px;
       display: inline-block;
       transition: background-color 0.3s;
+    }
+
+    .title {
+      height: fit-content;
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: inline-block;
     }
   }
 

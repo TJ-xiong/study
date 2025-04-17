@@ -9,6 +9,7 @@ import adaptiveText from '@/directives/AdaptiveText.ts' // 导入指令
 
 import App from './App.vue'
 import router from './router'
+import resizeAdaptiveText from "@/directives/ResizeAdaptiveText.ts";
 
 const app = createApp(App)
 
@@ -16,5 +17,6 @@ app.use(hljsVuePlugin) // 引入代码高亮，并进行全局注册
 app.use(createPinia())
 app.use(router)
 app.directive('adaptive-text', adaptiveText)
+app.directive('resize-adaptive-text', resizeAdaptiveText)
 
 app.mount('#app')
