@@ -51,6 +51,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/fontSizeAuto')">
         文字大小自适应
       </div>
+      <div class="item" @click="toPage('/textCollapse')">
+        展开/收起
+      </div>
     </div>
   </main>
 </template>

@@ -15,6 +15,7 @@ import Dialog from "@/views/Dialog.vue";
 import CustomRefDebounce from "@/views/CustomRefDebounce.vue";
 import WrapListener from "@/views/WrapListener.vue";
 import FontSizeAuto from "@/views/FontSizeAuto.vue";
+import TextCollapseDemo from "@/views/TextCollapseDemo.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,6 +99,11 @@ const router = createRouter({
             path: '/fontSizeAuto',
             name: 'FontSizeAuto',
             component: FontSizeAuto,
+        },
+        {
+            path: '/textCollapse',
+            name: 'textCollapse',
+            component: TextCollapseDemo,
         },
     ],
 })
