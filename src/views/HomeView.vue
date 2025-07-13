@@ -54,6 +54,9 @@ function toPage(url: string) {
       <div class="item" @click="toPage('/textCollapse')">
         展开/收起
       </div>
+      <div class="item" @click="toPage('/webSocketMsg')">
+        webSocketMsg
+      </div>
     </div>
   </main>
 </template>

@@ -16,6 +16,7 @@ import CustomRefDebounce from "@/views/CustomRefDebounce.vue";
 import WrapListener from "@/views/WrapListener.vue";
 import FontSizeAuto from "@/views/FontSizeAuto.vue";
 import TextCollapseDemo from "@/views/TextCollapseDemo.vue";
+import WebSocketMsg from "@/views/Message.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -105,6 +106,11 @@ const router = createRouter({
             name: 'textCollapse',
             component: TextCollapseDemo,
         },
+        {
+            path: '/webSocketMsg',
+            name: 'webSocketMsg',
+            component: WebSocketMsg,
+        }
     ],
 })
 
