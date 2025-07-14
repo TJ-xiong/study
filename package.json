@@ -7,11 +7,12 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "build-only": "vite build",
+    "build-only": "vite build && node scripts/post-build.cjs",
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
     "@highlightjs/vue-plugin": "^2.1.0",
+    "axios": "^1.10.0",
     "cors": "^2.8.5",
     "echarts": "^5.6.0",
     "element-plus": "^2.10.3",

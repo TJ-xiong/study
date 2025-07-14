@@ -13,17 +13,40 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import App from "./App.vue";
 import router from "./router";
 import resizeAdaptiveText from "@/directives/ResizeAdaptiveText.ts";
+import axios from 'axios';
 
-const app = createApp(App);
+async function loadConfig() {
+  const res = await fetch('/config.json');
+  const config = await res.json();
+  window.__APP_CONFIG__ = config;
 
-app.use(hljsVuePlugin); // 引入代码高亮，并进行全局注册
-app.use(createPinia());
-app.use(router);
-app.use(ElementPlus);
-app.directive("adaptive-text", adaptiveText);
-app.directive("resize-adaptive-text", resizeAdaptiveText);
-// 注册所有图标组件
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component);
+  axios.defaults.baseURL = config.VUE_APP_BASE_URL;
 }
-app.mount("#app");
+loadConfig().then(() => {
+  const app = createApp(App);
+  app.use(hljsVuePlugin); // 引入代码高亮，并进行全局注册
+  app.use(createPinia());
+  app.use(router);
+  app.use(ElementPlus);
+  app.directive("adaptive-text", adaptiveText);
+  app.directive("resize-adaptive-text", resizeAdaptiveText);
+  // 注册所有图标组件
+  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component);
+  }
+  app.mount("#app");
+});
+
+// const app = createApp(App);
+
+// app.use(hljsVuePlugin); // 引入代码高亮，并进行全局注册
+// app.use(createPinia());
+// app.use(router);
+// app.use(ElementPlus);
+// app.directive("adaptive-text", adaptiveText);
+// app.directive("resize-adaptive-text", resizeAdaptiveText);
+// // 注册所有图标组件
+// for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+//   app.component(key, component);
+// }
+// app.mount("#app");

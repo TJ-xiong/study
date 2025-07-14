@@ -1,60 +1,3 @@
-<template>
-  <div class="chat-container">
-    <h2 class="chat-title">Chat Room</h2>
-
-    <p class="status">
-      Status:
-      <span :class="isConnected ? 'status-online' : 'status-offline'">
-        {{ isConnected ? 'Connected' : 'Disconnected' }}
-      </span>
-    </p>
-
-    <ul class="message-list" ref="messageList">
-      <li
-          v-for="message in messages"
-          :key="message.id"
-          class="message-item"
-          :class="{ 'message-own': isOwnMessage(message) }"
-      >
-        <span v-if="isServerMessage(message)" class="server-message">
-          {{ message.text }}
-        </span>
-        <span v-else class="message-content">
-          <strong class="sender-name">{{ message.from || 'Anonymous' }}:</strong>
-          <span class="message-text">{{ message.text }}</span>
-        </span>
-      </li>
-    </ul>
-
-    <div class="send-to-container">
-      <label for="receiver" class="send-to-label">Send to:</label>
-      <select
-          v-model="receiverId"
-          id="receiver"
-          class="send-to-select"
-      >
-        <option value="">Broadcast (all)</option>
-        <option
-            v-for="user in onlineUsers"
-            :key="user"
-            :value="user"
-        >
-          {{ user }}
-        </option>
-      </select>
-    </div>
-
-    <input
-        type="text"
-        v-model="inputMessage"
-        placeholder="Type your message and press Enter"
-        @keydown.enter="sendMessage"
-        class="message-input"
-        autocomplete="off"
-    />
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
 
@@ -138,6 +81,63 @@ onMounted(() => {
   };
 });
 </script>
+
+<template>
+  <div class="chat-container">
+    <h2 class="chat-title">Chat Room</h2>
+
+    <p class="status">
+      Status:
+      <span :class="isConnected ? 'status-online' : 'status-offline'">
+        {{ isConnected ? 'Connected' : 'Disconnected' }}
+      </span>
+    </p>
+
+    <ul class="message-list" ref="messageList">
+      <li
+          v-for="message in messages"
+          :key="message.id"
+          class="message-item"
+          :class="{ 'message-own': isOwnMessage(message) }"
+      >
+        <span v-if="isServerMessage(message)" class="server-message">
+          {{ message.text }}
+        </span>
+        <span v-else class="message-content">
+          <strong class="sender-name">{{ message.from || 'Anonymous' }}:</strong>
+          <span class="message-text">{{ message.text }}</span>
+        </span>
+      </li>
+    </ul>
+
+    <div class="send-to-container">
+      <label for="receiver" class="send-to-label">Send to:</label>
+      <select
+          v-model="receiverId"
+          id="receiver"
+          class="send-to-select"
+      >
+        <option value="">Broadcast (all)</option>
+        <option
+            v-for="user in onlineUsers"
+            :key="user"
+            :value="user"
+        >
+          {{ user }}
+        </option>
+      </select>
+    </div>
+
+    <input
+        type="text"
+        v-model="inputMessage"
+        placeholder="Type your message and press Enter"
+        @keydown.enter="sendMessage"
+        class="message-input"
+        autocomplete="off"
+    />
+  </div>
+</template>
 
 <style scoped>
 .chat-container {
