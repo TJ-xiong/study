@@ -20,7 +20,7 @@ async function loadConfig() {
   const config = await res.json();
   window.__APP_CONFIG__ = config;
 
-  axios.defaults.baseURL = config.VUE_APP_BASE_URL;
+  // 设置request的baseurl（request暴露出一个修改baseurl的方法）
 }
 loadConfig().then(() => {
   const app = createApp(App);
