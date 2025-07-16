@@ -16,9 +16,9 @@ import resizeAdaptiveText from "@/directives/ResizeAdaptiveText.ts";
 import axios from 'axios';
 
 async function loadConfig() {
-  const res = await fetch('/config.json');
-  const config = await res.json();
-  window.__APP_CONFIG__ = config;
+  // const res = await fetch('/config.json');
+  // const config = await res.json();
+  // window.__APP_CONFIG__ = config;
 
   // 设置request的baseurl（request暴露出一个修改baseurl的方法）
 }
