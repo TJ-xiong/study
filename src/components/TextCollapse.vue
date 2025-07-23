@@ -65,6 +65,7 @@ function init() {
 }
 
 onMounted(() => {
+  init();
   if (!textCollapseRef.value) return
   const el = textCollapseRef.value
   // 使用 ResizeObserver 监听内容区域的大小变化
