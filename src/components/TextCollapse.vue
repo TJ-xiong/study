@@ -57,16 +57,16 @@ const isStringContent = ref(false)
 
 let observer = null
 
-onMounted(() => {
+function init() {
   // 判断 content 是不是 VNode 类型的内容
   isVNodeContent.value = isVNode(props.content)
   isVNodeArrayContent.value = Array.isArray(props.content) && props.content.length > 0 && props.content.every(isVNode)
   isStringContent.value = typeof props.content === 'string'
+}
 
+onMounted(() => {
   if (!textCollapseRef.value) return
-
   const el = textCollapseRef.value
-
   // 使用 ResizeObserver 监听内容区域的大小变化
   observer = new ResizeObserver(() => {
     const style = window.getComputedStyle(el)
@@ -97,6 +97,10 @@ watch(state, (val) => {
   textHeight.value = val ? textInitialHeight.value : textLineHeight.value * props.lineClamp
 })
 
+watch(() => props.content, (val) => {
+  init();
+})
+
 const handleClick = () => {
   state.value = !state.value
 }
@@ -108,7 +112,7 @@ const handleClick = () => {
   display: flex;
   flex-direction: row; /* 左右布局 */
   justify-content: flex-start; /* 左对齐 */
-  align-items: flex-start; /* 顶部对齐 */
+  align-items: flex-end; /* 顶部对齐 */
   margin-top: 11px;
   margin-bottom: 8px;
 
@@ -117,7 +121,6 @@ const handleClick = () => {
     position: relative;
     font-size: 14px;
     color: #333;
-    line-height: 22px;
     overflow: hidden;
     text-align: justify;
     transition: height 0.3s ease;
@@ -137,9 +140,6 @@ const handleClick = () => {
 
   /* 右侧的展开收起按钮 */
   .toggle-btn {
-    position: absolute;
-    right: 0;
-    bottom: 0;
     background: linear-gradient(to right, transparent 0%, #fff 30%);
     padding-left: 10px;
     font-size: 14px;
